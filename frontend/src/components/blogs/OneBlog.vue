@@ -37,7 +37,6 @@
             <button v-if="isValidToEdit" @click="deleteBlog">Delete</button>
         </div>
         <div>
-            <p>{{maincontent}}</p>
             <p>{{content1}}</p>
             <p>{{content2}}</p>
             <p v-if="!isValidToEdit">{{email}}</p>
@@ -46,13 +45,13 @@
     </section>
 
     <section class="commentClass">
-        <comment-list :blog_id=id ></comment-list>
+        <comment-list></comment-list>
     </section>
 </template>
 
 
 <script>
-    import commentList from '../comments/commentList.vue';
+    import CommentList from '../comments/commentList.vue';
     //import firebase from 'firebase';
     import BaseDialog from '../UI/BaseDialog.vue';
 import axios from 'axios';
@@ -60,7 +59,7 @@ import axios from 'axios';
     {
         components:{
             BaseDialog,
-            commentList
+            CommentList
         },
         created()
         {
@@ -71,7 +70,8 @@ import axios from 'axios';
                     this.maincontent = response.data.blog.maincontent;
                     this.content1 = response.data.blog.content1;
                     this.content2 = response.data.blog.content2;
-                    this.email = response.data.blog.user_mail;
+
+
                     this.userId = response.data.blog.user_id;
                     this.createdAt = response.data.blog.created_at;
                     this.imgUrl = 'http://localhost:3000'+response.data.blog.image.url;
@@ -79,6 +79,9 @@ import axios from 'axios';
                     {
                         this.isValidToEdit = true;
                     }
+
+
+
                     this.tempTitle = response.data.blog.title;
                     this.tempmainContent = response.data.blog.maincontent;
                     this.tempContent1 = response.data.blog.content1;
@@ -111,6 +114,7 @@ import axios from 'axios';
             });
             */
         },
+
         data(){
             return{
                 blog: this.$store.state.blog,
@@ -122,6 +126,9 @@ import axios from 'axios';
                 content1: '',
                 content2: '',
                 userId: null,
+
+                user: null,
+
                 isValidToEdit: false,
                 showedit: false,
                 tempTitle: '',
@@ -134,6 +141,14 @@ import axios from 'axios';
             };
         },
         methods:{
+            get_user(id)
+            {
+                axios.get( `http://localhost:3000/auth/getUser/${id}`).then(
+                    (response) => {
+                        this.user = response.data.user;
+                    }
+                );
+            },
             closeUpdate()
             {
                 this.showedit=false;
@@ -219,10 +234,11 @@ import axios from 'axios';
     margin-left: 40%;
     padding-top: 10px;
     padding-bottom: 10px;
+    margin-top: 20px;
+    border:1px solid whitesmoke;
 }
 .divButton:hover
 {
-    border:1px solid whitesmoke;
     border-radius: 10px;
     cursor: pointer;
 }
@@ -231,25 +247,31 @@ import axios from 'axios';
     margin-right: 20px;
     margin-top: 10px;
     margin-bottom: 20px;
+    margin-left: 20px;
 }
 .divInput label
 {
-    width: 30%;
-    float: left;
+    text-align: right;
     font-size: 18px;
+    float: left;
+    clear: both;
 }
 .divInput input
 {
-    width: 90%;
-    float: left;
+    width: 80%;
+    float: right;
+    margin-right: 60px;
     font-size: 18px;
     padding-top: 5px;
     padding-bottom: 5px;
+    color: white;
 }
 
 .divInput textarea
 {
-    width: 90%;
+    width: 80%;
+    float: right;
+    margin-right: 60px;
     border-radius: 6px;
     font-size: 15px;
     height: 15vh;
@@ -267,6 +289,7 @@ import axios from 'axios';
 {
     width: 60%;
     margin-left: 20%;
+    margin-top: 150px;
 }
 
 .maincontainer img{

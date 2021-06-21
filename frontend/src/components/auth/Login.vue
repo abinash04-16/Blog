@@ -1,6 +1,6 @@
 <template>
     <section v-if="alreadyLogin" class="whiteBack">
-        <div class='container1'>
+        <div>
             <p>Please Wait......</p>
         </div>
     </section>
@@ -32,7 +32,6 @@
                 <div class='altLink'>
                     <p>Create new Account, <router-link to="register">Register</router-link></p>
                 </div>
-
             </form>
         </div>
     </section>
@@ -45,16 +44,22 @@ import BaseDialog from '../UI/BaseDialog.vue';
     export default{
         components: { BaseDialog },
         mounted(){
+            
+            console.log(this.$store.state.isLoggedIn)
             if(localStorage.getItem('mail') && localStorage.getItem('password') )
             {
                 this.alreadyLogin = true;
                 axios.post('http://localhost:3000/login', { email: localStorage.getItem('mail'), password: localStorage.getItem('password')}).then(
                     (response) => {
                         console.log(response.data.mail);
-                        this.$store.commit('setMail_andId', { mail: response.data.mail, id: response.data.id })
+                        this.$store.commit('setMail_andId', { mail: response.data.mail, id: response.data.id });
+                        this.$store.state.isLoggedIn = true;
                         this.$router.push('/home');
                     }
                 );
+            }
+            else{
+                this.$store.state.isLoggedIn = false;
             }
         },
         data(){
@@ -80,9 +85,10 @@ import BaseDialog from '../UI/BaseDialog.vue';
                         (response) => {
                             if(response.data.result === 'success')
                             {
+                                this.$store.state.isLoggedIn = true;
                                 localStorage.setItem('mail', this.mail);
                                 localStorage.setItem('password', this.password);
-                                console.log(response.data.mail);
+                                console.log(response.data.user);
                                 this.$store.commit('setMail_andId', { mail: response.data.mail, id: response.data.id })
                                 this.$router.push('/home');
                             }
@@ -152,7 +158,6 @@ import BaseDialog from '../UI/BaseDialog.vue';
     top:50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    color: black;
     background-color: rgba(255, 255, 255, 0.63);
 }
 .container1 p
@@ -169,6 +174,8 @@ import BaseDialog from '../UI/BaseDialog.vue';
     left: 50%;
     transform: translate(-50%,-50%);
     color: white;
+    padding: 70px;
+    border-radius: 10px;
 }
 .container h2
 {
@@ -177,7 +184,7 @@ import BaseDialog from '../UI/BaseDialog.vue';
     margin-bottom: 30px 0;
     color: black;
     padding-bottom: 20px;
-    border-bottom: 3px solid rgb(81, 255, 0);
+    border-bottom: 3px solid #a3fa01;
 }
 
 .textbox
@@ -186,7 +193,7 @@ import BaseDialog from '../UI/BaseDialog.vue';
     padding: 10px;
     overflow: hidden;
     margin: 25px 0;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #000;
 }
 
 .textbox input{
@@ -194,14 +201,14 @@ import BaseDialog from '../UI/BaseDialog.vue';
     outline: none;
     font-size: 18px;
     background: none;
-    color: #000;
+    color: black;
 }
 
 .btn button
 {
     background: none;
     outline: none;
-    border: 2px solid #333;
+    border: 2px solid #000;
     padding: 10px;
     color: black;
     width: 100%;

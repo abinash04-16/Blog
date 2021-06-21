@@ -6,16 +6,18 @@ import addBlog from './components/blogs/AddBlog.vue';
 //import firebase from 'firebase';
 import MyBlog from './components/blogs/MyBlog.vue';
 import OneBlog from './components/blogs/OneBlog.vue';
+import about from './components/auth/about.vue';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/', redirect: '/home'},
-        { path: '/register', component: Register},
-        { path: '/login', component: Login},
-        { path: '/home', component: Home, meta: {requiresAuth: true} },
-        { path: '/addBlog', component: addBlog, meta: {requiresAuth: true}  },
-        { path: '/myBlogs', component: MyBlog,  meta: {requiresAuth: true} },
-        { path: '/blog/:id', component: OneBlog, meta: {requiresAuth: true} },
+        { path: '/register', component: Register, meta: { hideNav: true}},
+        { path: '/login', component: Login, meta: { hideNav: true}},
+        { path: '/home', component: Home, meta: {requiresAuth: true, hideNav: false} },
+        { path: '/about', component: about, meta: {requiresAuth: true, hideNav: false} },
+        { path: '/addBlog', component: addBlog, meta: {requiresAuth: true, hideNav: false}  },
+        { path: '/myBlogs', component: MyBlog,  meta: {requiresAuth: true, hideNav: false} },
+        { path: '/blog/:id', component: OneBlog, meta: {requiresAuth: true, hideNav: false} },
         { path: '/:notFound.(*)', redirect: '/home'},
     ]
 });

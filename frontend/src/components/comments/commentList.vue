@@ -1,28 +1,35 @@
 <template>
-    <h2>Comments</h2>
+    <div>
+        <h2>Comments</h2>
         <div class="getComment">
             <input type="text" placeholder="Enter your Comment Here" v-model="inComment" >
             <button @click="addComment" class="btn">Comment</button>
         </div>
-
-        <div class="allComments" v-if="comments.length !== 0">
-            <single-comment v-for="comment in comments"
-            :key="''+comment.commentId"
-            :id="''+comment.commentId"
-            :comment="comment.content"
-            :postedAt="comment.postedAt"
-            :userMail="comment.user_mail"></single-comment>
+            
+        <div class="allComments" v-if='comments.length !== 0'>
+            <one-comment v-for="comment in comments"
+            :key="comment.id"
+            :id='comment.id'
+            :content="comment.content"
+            :user_id="comment.user_id"
+            :createdAt="comment.createdAt"
+            :blog_id="comment.blog_id"></one-comment>
         </div>
-    
+    </div>
 </template>
 
 <script>
     //import firebase from 'firebase';
-    import singleComment from './singleComment.vue';
+    //import SingleComment from './singleComment.vue';
+    import oneComment from './oneComment.vue';
     import axios from 'axios';
     export default {
         created()
         {
+            console.log(this.$route.params.id);
+            this.retriveComments();
+            /*
+
             axios.get( `http://localhost:3000/comment/show/${this.$route.params.id}`).then((response) => {
                 console.log(response);
 
@@ -33,13 +40,13 @@
                         commentId: c.id,
                         postedAt: c.created_at,
                         content: c.content,
-                        user_id: c.user_id,
-                        blog_id: c.blog_id,
-                        user_mail: c.user_mail,
+                        user_id: 2,
+                        blog_id: c.blog_id
                     };
                     this.comments.unshift(sample);
                 });
-            })
+            });
+            */
 
             /*
             const db = firebase.database();
@@ -60,10 +67,8 @@
             */
         },
         components:{
-            singleComment
-        },
-        props:{
-            blog_id: Number
+            //SingleComment
+            oneComment
         },
         data(){
             return{
@@ -78,15 +83,7 @@
                 if(this.inComment !== '')
                 {
 
-                    axios.post( 'http://localhost:3000/comment/add', {
-                        content: this.inComment,
-                        user_id: this.$store.state.user_id,
-                        user_mail: this.$store.state.user_mail,
-                        blog_id: this.blog_id
-                        } ).then((response) => 
-                        {
-                            console.log(response);
-                        });
+                    axios.post( 'http://localhost:3000/comment/add', { content: this.inComment, blog_id: this.$route.params.id, });
                         this.inComment='';
                         this.retriveComments();
 
@@ -108,25 +105,24 @@
 
             retriveComments()
             {
-                console.log(this.$route.params.id);
                 this.comments.splice(0,this.comments.length);
                 axios.get( `http://localhost:3000/comment/show/${this.$route.params.id}`).then((response) => {
                     console.log(response);
-
                     const comment1 = response.data.comments;
 
                     comment1.forEach((c) => {
                         const sample = {
-                            commentId: c.id,
-                            postedAt: c.created_at,
-                            content: c.content,
+                            id: c.id,
                             user_id: c.user_id,
                             blog_id: c.blog_id,
-                            user_mail: c.user_mail,
+                            createdAt: c.created_at,
+                            content: c.content,
                         };
                         this.comments.unshift(sample);
                     });
                 });
+
+                console.log(this.comments);
 
 
                 /*

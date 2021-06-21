@@ -1,6 +1,7 @@
 class CommentController < ApplicationController
+	include UserHelper
 	def add
-		Comment.create(content: params[:content], user_id: params[:user_id], blog_id: params[:blog_id], user_mail: params[:user_mail])
+		Comment.create(content: params[:content], user_id: get_user.id, blog_id: params[:blog_id])
 
 		render json: { result: 'success' }
 	end

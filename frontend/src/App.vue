@@ -1,13 +1,13 @@
 <template>
- <router-view></router-view>
+  <nav-list></nav-list>
+  <router-view></router-view>
 </template>
 
 <script>
-  //import NavList from './components/nav/NavList.vue';
+  import NavList from './components/nav/NavList.vue';
   export default{
-    //components:{NavList}
+    components:{
+      NavList
+    },
   }
 </script>
-<style scoped>
-
-</style>

@@ -9,6 +9,13 @@ Rails.application.routes.draw do
   post 'login', controller: :auth, action: :login
   get 'isAuth', controller: :auth, action: :isAuth
   get 'logout', controller: :auth, action: :logout
+  post 'editUser', controller: :auth, action: :editUser
+
+  get 'auth/getUser/:id', controller: :auth, action: :getUser
+  get 'auth/getCurrentUser', controller: :auth, action: :getCurrentUser
+  post 'auth/updateUser', controller: :auth, action: :updateUser
+  get 'auth/getAll', controller: :auth, action: :getAllUser
+
 
   post 'blog/add', controller: :blog, action: :add
   get 'blog/show', controller: :blog, action: :show

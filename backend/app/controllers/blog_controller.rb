@@ -1,10 +1,10 @@
 class BlogController < ApplicationController
-  
+  include UserHelper
   def add
 
-  	Blog.create(title: params[:title], user_id: params[:user_id], user_mail: params[:user_mail], maincontent: params[:maincontent], content1: params[:content1], content2: params[:content2], image: params[:file] )
+  	Blog.create(title: params[:title], user_id: get_user.id, maincontent: params[:maincontent], content1: params[:content1], content2: params[:content2], image: params[:file] )
 
-  	render json: { result: 'success' }
+  	render json: { result: 'success', user: get_user }
 
   end
 

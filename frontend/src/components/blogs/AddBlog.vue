@@ -1,29 +1,28 @@
 <template>
-    <div class="myheader">
-        <h2>Blogs</h2>
-        <nav-list current="add"></nav-list>
-    </div>
-
-    
     <form @submit.prevent="addBlog">
-        <h2>Add your blog</h2>
+        <h2>ADD BLOG</h2>
         <div class='divItem'>
-            <input type="text" name="title" placeHolder="Title" v-model.trim='title'>
+            <label for="name">Title</label>
+            <input type="text" name="title" v-model.trim='title'>
         </div>
         <div class='divItem'>
-            <textarea name="content" rows="2" cols="50" placeHolder="Enter your Content in Short" v-model.trim='maincontent'></textarea>
+            <label for="content">Enter your Content in Short</label>
+            <input name="content" rows="2" cols="50" v-model.trim='maincontent'>
         </div>
         <div class='divItem'>
-            <textarea name="content" rows="4" cols="50" placeHolder="Paragraph" v-model.trim='content1'></textarea>
+            <label for="content1">Paragraph</label>
+            <textarea name="content1" rows="4" cols="50" v-model.trim='content1'></textarea>
         </div>
         <div class='divItem'>
-            <textarea name="content" rows="4" cols="50" placeHolder="Paragraph(optional)" v-model.trim='content2'></textarea>
+            <label for="content2">Paragraph(optional)</label>
+            <textarea name="content2" rows="4" cols="50" v-model.trim='content2'></textarea>
         </div>
         <div class='divItem'>
-            <input type="file" name="title" placeHolder="select Image" accept="image/*" @change="fileSelected">
+            <label for="image">Select your Blog Image</label>
+            <input type="file" name="image" accept="image/*" @change="fileSelected">
         </div>
         <div class='divItem'>
-            <button>add</button>
+            <button>ADD</button>
         </div>
     </form>
     <div v-if="loading" :class="loading ? 'loading' : null">
@@ -35,11 +34,12 @@
 
 <script>
     //import firebase from 'firebase';
-    import NavList from '../nav/NavList.vue';
     import axios from 'axios';
     export default
     {
-        components:{NavList,},
+        created(){
+            this.$store.commit( 'set_path', { path: 'add'});
+        },
         data(){
             return{
                 img: null,
@@ -129,17 +129,25 @@
 
 .divItem
 {
-    padding-top: 10px;
+    padding-bottom: 10px;
     width: 94%;
     margin-left: 3%;
 }
 
 .divItem input
 {
-    font-size: 18px;
+    font-size: 15px;
     padding-top: 10px;
     padding-left: 10px;
+    border-radius: 8px;
 
+}
+label
+{
+    display: block;
+    margin-bottom: 10px;
+    font-size: 19px;
+    color: rgb(121, 120, 120);
 }
 
 .divItem textarea
@@ -148,22 +156,21 @@
     padding-top: 10px;
     padding-left: 10px;
     height: 10vh;
+    border-radius: 8px;
 
 }
 
 .divItem button
 {
     background: none;
-    border: none;
     font-size: 20px;
+    border: 1px solid black;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 button:hover
 {
     cursor: pointer;
-    border: 1px solid black;
-    border-radius: 5px;
 }
 .loading
 {
@@ -182,23 +189,24 @@ form{
     border-radius: 5px;
     height: 70vh;
     margin: 0 auto;
-    background-color: #A1D6E2;
+    background-color: none;
     border-color: rgb(162, 89, 231);
     padding: 20px;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 h2
 {
-    text-align: center;
+    font-size: 37px;
+    text-align: left;
+    margin-left: 3%;
 }
 input{
     width: 100%;
     padding: 10px 0;
     border-radius: 4px;
     margin-bottom: 10px;
-    border: none;
+    border: 1px solid rgb(192, 191, 191);
     color: black;
-    border-bottom: 1px black solid;
     
 }
 
@@ -209,7 +217,7 @@ textarea{
     border-radius: 4px;
     border: none;
     color: black;
-    border-bottom: 1px black solid;
+    border: 1px solid rgb(192, 191, 191);
     
 }
 button
@@ -217,6 +225,8 @@ button
     width: 50%;
     margin-left:25%;
     padding: 5px;
+    font-weight: 600;
+    border-radius: 10px;
 }
 a
 {

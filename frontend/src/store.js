@@ -10,11 +10,17 @@ const store = createStore({
             user_mail: '',
             blogs: [],
             ownblogs:[],
+            path: 'home',
+            path1: '',
+            isLoggedIn: false,
         };
     },
     mutations:
     {
-
+        setPath(state, payload)
+        {
+            state.path = payload.path;
+        },
         clearAll(state)
         {
             state.user_id = null;
@@ -26,6 +32,10 @@ const store = createStore({
         {
             state.user_mail = payload.mail;
             state.user_id = payload.id;
+        },
+        loggedout(state)
+        {
+            state.isLoggedIn = false;
         },
         retriveState()
         {
@@ -79,7 +89,6 @@ const store = createStore({
                 (response) => {
                     const temp = response.data.blog;
                     temp.forEach(t => {
-                        console.log(t.image.url);
                         const sample = {
                             id: t.id,
                             title: t.title,
@@ -87,7 +96,6 @@ const store = createStore({
                             content1: t.content1,
                             content2: t.content2,
                             user_id: t.user_id,
-                            user_mail: t.user_mail,
                             createdAt: t.created_at,
                             updatedAt: t.updated_at,
                             image: t.image.url,
@@ -169,7 +177,9 @@ const store = createStore({
                     localStorage.removeItem('password');
                     router.push('/login');
                 }
-            })
+            });
+
+            context.commit('loggedout');
             
             /*
             firebase.auth().signOut().then(() => {
